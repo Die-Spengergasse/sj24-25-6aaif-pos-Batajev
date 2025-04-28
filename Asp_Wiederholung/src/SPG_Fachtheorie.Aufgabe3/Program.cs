@@ -12,6 +12,8 @@ builder.Services.AddDbContext<AppointmentContext>(opt =>
     opt.UseSqlite("DataSource=cash.db");
 });
 
+builder.Services.AddScoped<SPG_Fachtheorie.Aufgabe3.Services.IPaymentService, SPG_Fachtheorie.Aufgabe3.Services.PaymentService>();
+
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -34,6 +36,6 @@ if (app.Environment.IsDevelopment())
 }
 
 // Request pipeline
-app.MapControllers();  // Passt ein Controller zur Adresse? Ja: Diesen ausführen.
+app.MapControllers();  // Passt ein Controller zur Adresse? Ja: Diesen ausfï¿½hren.
 app.Run();
 

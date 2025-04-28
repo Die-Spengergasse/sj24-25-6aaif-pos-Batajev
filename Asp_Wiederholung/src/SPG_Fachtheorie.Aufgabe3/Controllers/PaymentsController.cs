@@ -7,6 +7,8 @@ using SPG_Fachtheorie.Aufgabe3.Commands;
 using SPG_Fachtheorie.Aufgabe3.Dtos;
 using System;
 using System.Threading.Tasks;
+using SPG_Fachtheorie.Aufgabe3.Services;
+
 
 namespace SPG_Fachtheorie.Aufgabe3.Controllers
 {
@@ -15,11 +17,15 @@ namespace SPG_Fachtheorie.Aufgabe3.Controllers
     public class PaymentsController : ControllerBase
     {
         private readonly AppointmentContext _db;
+        private readonly IPaymentService _paymentService;
+    
 
-        public PaymentsController(AppointmentContext db)
-        {
-            _db = db;
-        }
+        public PaymentsController(AppointmentContext db, IPaymentService paymentService)
+{
+    _db = db;
+    _paymentService = paymentService;
+}
+
 
         /// <summary>
         /// GET /api/payments
@@ -197,7 +203,7 @@ namespace SPG_Fachtheorie.Aufgabe3.Controllers
             return NoContent();
         }
 
-        [HttpPatch("{id}")]
+                [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateConfirmed(int id, [FromBody] UpdateConfirmedCommand command)
         {
             var payment = await _db.Payments.FindAsync(id);
@@ -222,6 +228,14 @@ namespace SPG_Fachtheorie.Aufgabe3.Controllers
             payment.Confirmed = command.Confirmed;
             await _db.SaveChangesAsync();
             return NoContent();
+        }
+
+        
+        [HttpPost("mockPayment")]
+        public IActionResult ProcessPayment([FromBody] PaymentDto dto)
+        {
+            var result = _paymentService.ProcessPayment(dto);
+            return Ok(result);
         }
     }
 }
